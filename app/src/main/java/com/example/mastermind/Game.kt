@@ -119,17 +119,17 @@ fun checkColors(
 
     return feedbackColors
 }
-
 @Composable
+
 fun GameScreen(
     navController: NavController,
-    //viewModel: GameViewModel = viewModel(factory = AppProvider.Factory),
     viewModel: GameViewModel = hiltViewModel<GameViewModel>(),
     colorCount: Int
 ) {
     val allColors = listOf(Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Cyan, Color.Magenta, Color.Gray, Color.Black, Color(0xffff6600),Color(0xfff3c2e2))
     val availableColors = List(colorCount) { index -> allColors[index % allColors.size]}
     val score = remember { mutableIntStateOf(0) }
+    var showCongratulations by remember { mutableStateOf(false) }
     var rows = remember {
         mutableStateListOf(
             RowState(
@@ -142,6 +142,23 @@ fun GameScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val correctColors = remember { selectRandomColors(availableColors) }
+
+    if (showCongratulations) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showCongratulations = false },
+            title = { Text("Gratulacje!") },
+            text = { Text("Udało Ci się ukończyć grę z wynikiem: ${score.intValue}") },
+            confirmButton = {
+                Button(
+                    onClick = { showCongratulations = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8A2BE2))
+                ) {
+                    Text("Zamknij")
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.background
+        )
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -202,13 +219,12 @@ fun GameScreen(
                             viewModel.score.longValue = score.intValue.toLong()
                             coroutineScope.launch {
                                 viewModel.savePlayerScore()
+                                showCongratulations = true
                             }
-
                         }
                     }
                 )
             }
-
         }
 
         Spacer(modifier = Modifier.weight(0.1f))
@@ -247,6 +263,15 @@ fun GameScreen(
             ) {
                 Text("Wyniki")
             }
+
+//            Button(
+//                onClick = {
+//                    navController.navigate(Screen.Profile.route)
+//                },
+//                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8A2BE2))
+//            ) {
+//                Text("Profil")
+//            }
         }
     }
 }
