@@ -264,14 +264,14 @@ fun GameScreen(
                 Text("Wyniki")
             }
 
-//            Button(
-//                onClick = {
-//                    navController.navigate(Screen.Profile.route)
-//                },
-//                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8A2BE2))
-//            ) {
-//                Text("Profil")
-//            }
+            Button(
+                onClick = {
+                    navController.navigate(Screen.Profile.passArguments(colorCount = colorCount)
+                },
+               colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8A2BE2))
+            ) {
+                Text("Profil")
+            }
         }
     }
 }
