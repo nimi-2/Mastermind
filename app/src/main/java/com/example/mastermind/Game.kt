@@ -266,7 +266,7 @@ fun GameScreen(
 
             Button(
                 onClick = {
-                    navController.navigate(Screen.Profile.passArguments(colorCount = colorCount)
+                    navController.navigate(Screen.Profile.passArguments(colorCount = colorCount))
                 },
                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8A2BE2))
             ) {
